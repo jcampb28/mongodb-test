@@ -1,23 +1,43 @@
-const db = require("../connection.mjs")
-const {seed, seedProducts } = require("../db/seed/seed")
-const mongoose = require("mongoose")
+const request = require("supertest");
+const app = require("../server/server");
 
+const { connectDB } = require("../db/connection");
+const { seed } = require("../db/seed/seed");
+const mongoose = require("mongoose");
 
+beforeAll(async () => {
+  await connectDB();
+  await seed();
+});
 
-beforeAll(() => 
-    mongoose.connect(db, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(() => {
-        console.log("connected to" + db);
-        seed(seedProducts)
-    })
-)
-    
-// afterEach(async () => await db.clear()) 
-afterAll(() => mongoose.connection.close()) 
+afterAll(async () => {
+  await mongoose.connection.close();
+});
 
-test("4 items have a price of 10", () => {
-    const test = db.getCollection("test").find({price: {$eq: 100}}).count()
-    expect(test).toBe(1)
-}, 10000)
+describe("Products API", () => {
+  test("GET /products returns list of products", async () => {
+    const res = await request(app).get("/products");
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    expect(res.body[0]).toHaveProperty("name");
+  });
+
+  test("POST /products creates a new product", async () => {
+    const newProduct = {
+      name: "Test Product",
+      quantity: 10,
+      unit: "pcs",
+      category: "other",
+      expiryDate: "2025-12-31"
+    };
+
+    const res = await request(app)
+      .post("/products")
+      .send(newProduct);
+
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty("_id");
+    expect(res.body.name).toBe(newProduct.name);
+  });
+});

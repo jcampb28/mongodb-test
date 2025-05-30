@@ -36,9 +36,9 @@ const seedProducts = [
   },
 ]
 
-const seed = () => {
-  Product.deleteMany({});
-  Product.insertMany(seedProducts)
-}
+const seed = async () => {
+  await Product.deleteMany({});
+  await Product.insertMany(seedProducts);
+};
 
 module.exports = {seed, Product, seedProducts}
