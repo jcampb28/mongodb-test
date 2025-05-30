@@ -1,0 +1,19 @@
+{
+  "name": "seed-test",
+  "version": "0.0.1",
+  "description": "seeding test for mongoDB",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "jest": "^29.7.0",
+    "mongodb": "^6.16.0",
+    "mongodb-memory-server": "^10.1.4",
+    "mongoose": "^8.15.1",
+    "save-dev": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^5.2.2"
+  }
+}
