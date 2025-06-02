@@ -11,4 +11,14 @@ usersRouter.get("/", async (req, res) => {
     }
 })
 
+usersRouter.post("/", async (req, res) => {
+    try{
+        const newUser = await User({...req.body})
+        await newUser.save()
+        res.status(201).json(newUser)
+    } catch (err) {
+        res.status(500).json({error: "Failed to add new user"})
+    }
+})
+
 module.exports = usersRouter

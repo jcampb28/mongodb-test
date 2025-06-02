@@ -71,3 +71,15 @@ describe("GET /api/users", () => {
     });
     })
 })
+
+describe("POST /api/users", () => {
+    test("add a user to the database", async () => {
+      const newUser = {username:"Fridges", name:"Jack Smith", emailAddress:"email1@address.com",
+    profilePicURL: "", householdID:"d5TFbn", allergies:"", dietaryRequirements:""}
+        const res = await request(app).post("/users").send(newUser)
+        expect(res.statusCode).toBe(201);
+        expect(res.body).toHaveProperty("pantry");
+        expect(res.body.name).toBe(newUser.name);
+    
+})
+})
