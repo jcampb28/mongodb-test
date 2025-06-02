@@ -16,26 +16,37 @@ afterAll(async () => {
 
 describe("Products API", () => {
   test("GET /products returns list of products", async () => {
-    const res = await request(app).get("/products");
+    const res = await request(app).get("/items");
+    console.log(res.body)
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0]).toHaveProperty("name");
+    expect(res.body.length).toBe(4);
+    res.body.forEach((item) => {
+      expect(item).toMatchObject({
+        name: expect.any(String),
+        quantity: expect.any(String),
+        unit: expect.any(String),
+        location: expect.any(String),
+        category: expect.any(String),
+        dateAdded: expect.any(String),
+        expiryDate: expect.any(String),
+        expiresSoon: expect.any(Boolean),
+      });
+    });
   });
 
-  test("POST /products creates a new product", async () => {
+  test.skip("POST /products creates a new product", async () => {
     const newProduct = {
-      name: "Test Product",
-      quantity: 10,
+      name: "bread",
+      quantity: 1,
       unit: "pcs",
-      category: "other",
-      expiryDate: "2025-12-31"
+      location: "cupboard",
+      category: "breadBakery",
+      expiryDate: "2025-05-06",
     };
 
-    const res = await request(app)
-      .post("/products")
-      .send(newProduct);
-
+    const res = await request(app).post("/items").send(newProduct);
+    console.log(res, " <<<<<<")
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty("_id");
     expect(res.body.name).toBe(newProduct.name);

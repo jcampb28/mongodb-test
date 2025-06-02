@@ -1,19 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const Item = require("../models/item");
+const Item = require("../db/seed/item-schema");
 
-// GET /inventory/fridge
-router.get("/fridge", async (req, res) => {
+// GET /items
+router.get("/items", async (req, res) => {
   try {
-    const items = await Item.find({ location: "fridge" });
+    const items = await Item.find();
     res.json(items);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch fridge items" });
   }
 });
 
-// POST /inventory/fridge
-router.post("/fridge", async (req, res) => {
+// POST /items
+router.post("/items", async (req, res) => {
   try {
     const newItem = new Item({ ...req.body, location: "fridge" });
     await newItem.save();
