@@ -1,7 +1,7 @@
 const testItems = [
     {
         name: "milk",
-        quantity: "4",
+        quantity: 4,
         unit: "pints",
         location: "fridge",
         category: "dairyEggs",
@@ -9,7 +9,7 @@ const testItems = [
     },
     {
         name: "cheese",
-        quantity: "250",
+        quantity: 250,
         unit: "g",
         location: "fridge",
         category: "dairyEggs",
@@ -17,7 +17,7 @@ const testItems = [
     },
     {
         name: "tomatoes",
-        quantity: "7",
+        quantity: 7,
         unit: "pcs",
         location: "fridge",
         category: "fruitVeg",
@@ -25,7 +25,7 @@ const testItems = [
     },
     {
         name: "flour",
-        quantity: "750",
+        quantity: 750,
         unit: "g",
         location: "cupboard",
         category: "other",

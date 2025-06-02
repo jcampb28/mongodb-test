@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Item = require("../db/seed/item-schema");
+const { Item } = require("../../db/seed/item-schema");
 
 // GET /items
-router.get("/items", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const items = await Item.find();
     res.json(items);
@@ -13,9 +13,9 @@ router.get("/items", async (req, res) => {
 });
 
 // POST /items
-router.post("/items", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const newItem = new Item({ ...req.body, location: "fridge" });
+    const newItem = new Item({ ...req.body });
     await newItem.save();
     res.status(201).json(newItem);
   } catch (err) {

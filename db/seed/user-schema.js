@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const generateRandomString = require("./utils");
-const Item = require("./item-schema");
+const { itemSchema } = require("./item-schema");
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
   dietaryRequirements: {
     type: String,
   },
-  pantry: [Item],
+  pantry: [itemSchema],
 });
 
 const User = mongoose.model("User", userSchema);

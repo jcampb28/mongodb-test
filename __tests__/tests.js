@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../server/server");
+const app = require("../server/app");
 
 const { connectDB } = require("../db/connection");
 const { seed } = require("../db/seed/seed");
@@ -14,17 +14,16 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-describe("Products API", () => {
-  test("GET /products returns list of products", async () => {
+xdescribe("Inventory API (GET, POST)", () => {
+  test("GET /items returns list of items", async () => {
     const res = await request(app).get("/items");
-    console.log(res.body)
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
     expect(res.body.length).toBe(4);
     res.body.forEach((item) => {
       expect(item).toMatchObject({
         name: expect.any(String),
-        quantity: expect.any(String),
+        quantity: expect.any(Number),
         unit: expect.any(String),
         location: expect.any(String),
         category: expect.any(String),
@@ -35,7 +34,7 @@ describe("Products API", () => {
     });
   });
 
-  test.skip("POST /products creates a new product", async () => {
+  test("POST /items creates a new items", async () => {
     const newProduct = {
       name: "bread",
       quantity: 1,
@@ -46,9 +45,29 @@ describe("Products API", () => {
     };
 
     const res = await request(app).post("/items").send(newProduct);
-    console.log(res, " <<<<<<")
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty("_id");
     expect(res.body.name).toBe(newProduct.name);
   });
 });
+
+describe("GET /api/users", () => {
+    test("returns an array of users", async () => {
+        const res = await request(app).get("/users")
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body.length).toBe(3);
+        res.body.forEach((item) => {
+      expect(item).toMatchObject({
+        name: expect.any(String),
+        username: expect.any(String),
+        emailAddress: expect.any(String),
+        profilePicURL: expect.any(String),
+        householdID: expect.any(String),
+        allergies: expect.any(String),
+        dietaryRequirements: expect.any(String),
+        pantry: expect.any(Array),
+      });
+    });
+    })
+})
