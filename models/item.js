@@ -22,7 +22,7 @@ const itemSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ["dairy", "meatAndFish", "fruitAndVeg", "snacks", "herbs", "other"],
+    enum: ["dairyAndEggs", "meatAndFish", "fruitAndVeg", "snacks", "drinks", "herbsAndSpices", "other"],
     default: "other"
   },
   dateAdded: {
