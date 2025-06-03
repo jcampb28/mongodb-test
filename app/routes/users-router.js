@@ -24,7 +24,9 @@ usersRouter.post("/", async (req, res) => {
 
 usersRouter.get("/:username", async (req, res) => {
     try {
-    const user = await User.findOne({username:req.params.username});
+    const userName = req.params.username
+    const user = await User.findOne({username:userName});
+    res.json(user)
     } catch (err) {
         res.status(500).json({error: "Failed to find users"})
     }
