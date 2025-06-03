@@ -1,0 +1,52 @@
+{
+  "GET /api": {
+    "description": "serves up an array of all available endpoits"
+  },
+  "GET /users": {
+    "description": "serves up an array of all users in the database",
+    "example response": [
+      {
+        "_id": "683dc10171f1685fc3008e36",
+        "username": "fridge1234",
+        "name": "John Smith",
+        "emailAddress": "email@address.com",
+        "profilePicURL": "",
+        "householdID": "d5TFbn",
+        "allergies": "milk, peanuts",
+        "dietaryRequirements": "",
+        "pantry": [{}],
+        "dateAdded": "2025-06-02T15:19:29.222+00:00",
+        "__v": 0
+      },
+      {
+        "_id": "683ed18115441a5bb547e23c",
+        "username": "freezer5678",
+        "name": "Jane Smith",
+        "emailAddress": "e-mail@address.com",
+        "profilePicURL": "",
+        "householdID": "f6yHHH",
+        "allergies": "",
+        "dietaryRequirements": "vegan",
+        "pantry": [{}],
+        "dateAdded": "2025-06-03T10:42:09.973+00:00",
+        "__v": 0
+      }
+    ]
+  },
+  "GET /api/users/:username": {
+    "decription": "serves up an object containing the specified user",
+    "example response": {
+      "_id": "683dc10171f1685fc3008e36",
+      "username": "fridge1234",
+      "name": "John Smith",
+      "emailAddress": "email@address.com",
+      "profilePicURL": "",
+      "householdID": "d5TFbn",
+      "allergies": "milk, peanuts",
+      "dietaryRequirements": "",
+      "pantry": [{}],
+      "dateAdded": "2025-06-02T15:19:29.222+00:00",
+      "__v": 0
+    }
+  }
+}
