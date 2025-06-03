@@ -54,7 +54,7 @@ describe("POST /api/users", () => {
 });
 
 describe("GET /users/:username", () => {
-  test("returns an object with a  single user", async () => {
+  test("returns an object with a single user", async () => {
     const res = await request(app).get("/users/fridge1234");
     expect(res.statusCode).toBe(200);
     expect(res.body).toMatchObject({
