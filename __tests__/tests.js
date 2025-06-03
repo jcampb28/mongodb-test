@@ -52,12 +52,12 @@ xdescribe("Inventory API (GET, POST)", () => {
 });
 
 describe("GET /api/users", () => {
-    test("returns an array of users", async () => {
-        const res = await request(app).get("/users")
-        expect(res.statusCode).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
-        expect(res.body.length).toBe(3);
-        res.body.forEach((item) => {
+  test("returns an array of users", async () => {
+    const res = await request(app).get("/users");
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(3);
+    res.body.forEach((item) => {
       expect(item).toMatchObject({
         name: expect.any(String),
         username: expect.any(String),
@@ -69,17 +69,23 @@ describe("GET /api/users", () => {
         pantry: expect.any(Array),
       });
     });
-    })
-})
+  });
+});
 
 describe("POST /api/users", () => {
-    test("add a user to the database", async () => {
-      const newUser = {username:"Fridges", name:"Jack Smith", emailAddress:"email1@address.com",
-    profilePicURL: "", householdID:"d5TFbn", allergies:"", dietaryRequirements:""}
-        const res = await request(app).post("/users").send(newUser)
-        expect(res.statusCode).toBe(201);
-        expect(res.body).toHaveProperty("pantry");
-        expect(res.body.name).toBe(newUser.name);
-    
-})
-})
+  test("add a user to the database", async () => {
+    const newUser = {
+      username: "Fridges",
+      name: "Jack Smith",
+      emailAddress: "email1@address.com",
+      profilePicURL: "",
+      householdID: "d5TFbn",
+      allergies: "",
+      dietaryRequirements: "",
+    };
+    const res = await request(app).post("/users").send(newUser);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toHaveProperty("pantry");
+    expect(res.body.name).toBe(newUser.name);
+  });
+});
