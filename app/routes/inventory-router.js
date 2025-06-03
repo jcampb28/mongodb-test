@@ -1,16 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { Item } = require("../../db/seed/item-schema");
+const User = require("../../db/seed/user-schema");
 
-// GET /items
-router.get("/", async (req, res) => {
-  try {
-    const items = await Item.find();
-    res.json(items);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch fridge items" });
-  }
-});
+
 
 // POST /items
 router.post("/", async (req, res) => {
@@ -22,5 +15,8 @@ router.post("/", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+
+
 
 module.exports = router;

@@ -14,27 +14,16 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-xdescribe("Inventory API (GET, POST)", () => {
-  test("GET /items returns list of items", async () => {
-    const res = await request(app).get("/items");
-    expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(4);
-    res.body.forEach((item) => {
-      expect(item).toMatchObject({
-        name: expect.any(String),
-        quantity: expect.any(Number),
-        unit: expect.any(String),
-        location: expect.any(String),
-        category: expect.any(String),
-        dateAdded: expect.any(String),
-        expiryDate: expect.any(String),
-        expiresSoon: expect.any(Boolean),
-      });
-    });
-  });
 
-  test("POST /items creates a new items", async () => {
+
+
+
+
+
+
+
+
+  xtest("POST /items creates a new items", async () => {
     const newProduct = {
       name: "bread",
       quantity: 1,
@@ -49,7 +38,7 @@ xdescribe("Inventory API (GET, POST)", () => {
     expect(res.body).toHaveProperty("_id");
     expect(res.body.name).toBe(newProduct.name);
   });
-});
+
 
 describe("GET /api/users", () => {
   test("returns an array of users", async () => {
@@ -91,7 +80,7 @@ describe("POST /api/users", () => {
 });
 
 describe("GET /users/:username", () => {
-  test.only("returns an object with a  single user", async () => {
+  test("returns an object with a  single user", async () => {
     const res = await request(app).get("/users/fridge1234");
     expect(res.statusCode).toBe(200);
     expect(res.body).toMatchObject({
@@ -109,4 +98,26 @@ describe("GET /users/:username", () => {
         
 
   },15000);
+});
+
+
+describe("Inventory API (GET, POST)", () => {
+  test("GET /users/:username/pantry", async () => {
+    const res = await request(app).get("/users/fridge1234/pantry");
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBe(1);
+    res.body.forEach((item) => {
+      expect(item).toMatchObject({
+        name: expect.any(String),
+        quantity: expect.any(Number),
+        unit: expect.any(String),
+        location: expect.any(String),
+        category: expect.any(String),
+        dateAdded: expect.any(String),
+        expiryDate: expect.any(String),
+        expiresSoon: expect.any(Boolean),
+      });
+    });
+  });
 });

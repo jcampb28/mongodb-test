@@ -10,7 +10,12 @@ const testUsers = [
     householdID: "d5TFbn",
     allergies: "milk, peanuts",
     dietaryRequirements: "",
-    pantry: [],
+    pantry: [{name: "milk",
+        quantity: 4,
+        unit: "pints",
+        location: "fridge",
+        category: "dairyEggs",
+        expiryDate: "2025-06-06",}],
   },
   {
     username: "freezer5678",

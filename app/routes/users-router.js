@@ -32,7 +32,17 @@ usersRouter.get("/:username", async (req, res) => {
     }
 })
 
-
+// GET /items
+usersRouter.get("/:username/pantry", async (req, res) => {
+  try {
+    await console.log(req.params)
+    const items = await User.findOne({username:req.params.username});
+    await console.log(items)
+    res.json(items.pantry);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch fridge items" });
+  }
+});
 
 
 module.exports = usersRouter
