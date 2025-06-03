@@ -21,4 +21,16 @@ usersRouter.post("/", async (req, res) => {
     }
 })
 
+
+usersRouter.get("/:username", async (req, res) => {
+    try {
+    const user = await User.findOne({username:req.params.username});
+    } catch (err) {
+        res.status(500).json({error: "Failed to find users"})
+    }
+})
+
+
+
+
 module.exports = usersRouter

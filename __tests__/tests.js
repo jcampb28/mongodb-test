@@ -89,3 +89,25 @@ describe("POST /api/users", () => {
     expect(res.body.name).toBe(newUser.name);
   });
 });
+
+describe("GET /users/:username", () => {
+  test("returns an object with a  single user", async () => {
+    const res = await request(app).get("/users/fridge1234");
+    console.log(res.body)
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toMatchObject({
+        name: expect.any(String),
+        username: expect.any(String),
+        emailAddress: expect.any(String),
+        profilePicURL: expect.any(String),
+        householdID: expect.any(String),
+        allergies: expect.any(String),
+        dietaryRequirements: expect.any(String),
+        pantry: expect.any(Array),
+        _id:expect.any(String)
+      })
+
+        
+
+  },10000);
+});
