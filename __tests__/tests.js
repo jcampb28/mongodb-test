@@ -14,32 +14,6 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-
-
-
-
-
-
-
-
-
-  xtest("POST /items creates a new items", async () => {
-    const newProduct = {
-      name: "bread",
-      quantity: 1,
-      unit: "pcs",
-      location: "cupboard",
-      category: "breadBakery",
-      expiryDate: "2025-05-06",
-    };
-
-    const res = await request(app).post("/items").send(newProduct);
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty("_id");
-    expect(res.body.name).toBe(newProduct.name);
-  });
-
-
 describe("GET /api/users", () => {
   test("returns an array of users", async () => {
     const res = await request(app).get("/users");
@@ -84,25 +58,21 @@ describe("GET /users/:username", () => {
     const res = await request(app).get("/users/fridge1234");
     expect(res.statusCode).toBe(200);
     expect(res.body).toMatchObject({
-        name: expect.any(String),
-        username: expect.any(String),
-        emailAddress: expect.any(String),
-        profilePicURL: expect.any(String),
-        householdID: expect.any(String),
-        allergies: expect.any(String),
-        dietaryRequirements: expect.any(String),
-        pantry: expect.any(Array),
-        _id:expect.any(String)
-      })
-
-        
-
-  },15000);
+      name: expect.any(String),
+      username: expect.any(String),
+      emailAddress: expect.any(String),
+      profilePicURL: expect.any(String),
+      householdID: expect.any(String),
+      allergies: expect.any(String),
+      dietaryRequirements: expect.any(String),
+      pantry: expect.any(Array),
+      _id: expect.any(String),
+    });
+  }, 15000);
 });
 
-
-describe("Inventory API (GET, POST)", () => {
-  test("GET /users/:username/pantry", async () => {
+describe("GET /users/:username/pantry", () => {
+  test("Should return an array containing all items the users owns", async () => {
     const res = await request(app).get("/users/fridge1234/pantry");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
@@ -118,6 +88,34 @@ describe("Inventory API (GET, POST)", () => {
         expiryDate: expect.any(String),
         expiresSoon: expect.any(Boolean),
       });
+    });
+  });
+});
+
+describe("POST /users/:username/pantry", () => {
+  test("adds a new item to the user's pantry array", async () => {
+    const newItem = {
+      name: "bread",
+      quantity: 1,
+      unit: "pcs",
+      location: "cupboard",
+      category: "breadBakery",
+      expiryDate: "2025-05-06",
+    };
+    const res = await request(app)
+      .post("/users/freezer5678/pantry")
+      .send(newItem);
+    expect(res.statusCode).toBe(201);
+    expect(res.body[0]).toEqual({
+      name: "bread",
+      quantity: 1,
+      unit: "pcs",
+      location: "cupboard",
+      category: "breadBakery",
+      dateAdded: expect.any(String),
+      expiryDate: expect.any(String),
+      expiresSoon: expect.any(Boolean),
+      _id: expect.any(String)
     });
   });
 });
