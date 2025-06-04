@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../server/app");
-
 const { connectDB } = require("../db/connection");
 const { seed } = require("../db/seed/seed");
 const mongoose = require("mongoose");
@@ -76,7 +75,7 @@ describe("GET /users/:username/pantry", () => {
     const res = await request(app).get("/users/fridge1234/pantry");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(1);
+    expect(res.body.length).toBe(3);
     res.body.forEach((item) => {
       expect(item).toMatchObject({
         name: expect.any(String),
@@ -88,6 +87,55 @@ describe("GET /users/:username/pantry", () => {
         expiryDate: expect.any(String),
         expiresSoon: expect.any(Boolean),
       });
+    });
+  });
+  describe("GET /users/:username/pantry - filter", () => {
+    test("Should return an array filtered only by the location specified", async () => {
+      const res = await request(app).get(
+        "/users/fridge1234/pantry?location=fridge"
+      );
+      expect(res.statusCode).toBe(200);
+      expect(res.body.length).toBe(2);
+      res.body.forEach((item) => {
+        expect(item.location).toBe("fridge");
+      });
+    });
+    test("Should return an empty array when no items are in the location specified", async () => {
+      const res = await request(app).get(
+        "/users/fridge1234/pantry?location=freezer"
+      );
+      expect(res.statusCode).toBe(200);
+      expect(res.body.length).toBe(0);
+      expect(res.body).toEqual([]);
+    });
+    test("Should return an array filtered by the location and category specified", async () => {
+      const res = await request(app).get(
+        "/users/fridge1234/pantry?location=fridge&category=dairyEggs"
+      );
+      expect(res.statusCode).toBe(200);
+      expect(res.body.length).toBe(1);
+      res.body.forEach((item) => {
+        expect(item.location).toBe("fridge");
+        expect(item.category).toBe("dairyEggs");
+      });
+    });
+    test("Should return an array filtered only by the category specified", async () => {
+      const res = await request(app).get(
+        "/users/fridge1234/pantry?category=dairyEggs"
+      );
+      expect(res.statusCode).toBe(200);
+      expect(res.body.length).toBe(1);
+      res.body.forEach((item) => {
+        expect(item.category).toBe("dairyEggs");
+      });
+    });
+    test("The default sorting of the pantry array should be earliest expiry date first", async () => {
+      const res = await request(app).get(
+        "/users/fridge1234/pantry?sortby=expiryDate"
+      );
+      expect(res.statusCode).toBe(200);
+      expect(res.body.length).toBe(3);
+      expect(res.body).toBeSortedBy("expiryDate");
     });
   });
 });
@@ -115,7 +163,34 @@ describe("POST /users/:username/pantry", () => {
       dateAdded: expect.any(String),
       expiryDate: expect.any(String),
       expiresSoon: expect.any(Boolean),
-      _id: expect.any(String)
+      _id: expect.any(String),
     });
   });
 });
+
+describe("PATCH /users/:username", () => {
+  test("user can update their personal details", async () => {
+    const patchedUser = {
+      username: "tinned-tomato",
+      name: "John",
+      emailAddress: "email@address.com",
+      allergies: "",
+      dietaryRequirements: "pescatarian"
+    };
+    const res = await request(app).patch("/users/fridge1234").send(patchedUser);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toEqual({
+      name: "John",
+      username: "tinned-tomato",
+      emailAddress: "email@address.com",
+      profilePicURL: expect.any(String),
+      householdID: "d5TFbn",
+      allergies: "",
+      dietaryRequirements: "pescatarian",
+      pantry: expect.any(Array),
+      _id: expect.any(String),
+      __v: 0,
+      dateAdded: expect.any(String)
+    })
+  })
+})

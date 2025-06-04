@@ -1,5 +1,5 @@
 {
-  "GET /api": {
+  "GET /": {
     "description": "serves up an array of all available endpoits"
   },
   "GET /users": {
@@ -33,7 +33,7 @@
       }
     ]
   },
-  "GET /api/users/:username": {
+  "GET /users/:username": {
     "decription": "serves up an object containing the specified user",
     "example response": {
       "_id": "683dc10171f1685fc3008e36",
@@ -49,8 +49,9 @@
       "__v": 0
     }
   },
-  "GET /api/users/:username/pantry": {
-    "description": "returns an array of all items owned by the user",
+  "GET /users/:username/pantry": {
+    "description": "returns an array of all items owned by the user; sorted with soonest expiry date first",
+    "filters": "accepts location and category filters, which only return items with the specified filters",
     "example response": [
       {
         "name": "milk",
@@ -68,31 +69,31 @@
   "POST /users": {
     "description": "adds a new user to the database",
     "example response": {
-        "_id": "683dc10171f1685fc3008e36",
-        "username": "fridge1234",
-        "name": "John Smith",
-        "emailAddress": "email@address.com",
-        "profilePicURL": "",
-        "householdID": "d5TFbn",
-        "allergies": "milk, peanuts",
-        "dietaryRequirements": "",
-        "pantry": [{}],
-        "dateAdded": "2025-06-02T15:19:29.222+00:00",
-        "__v": 0
-      }
+      "_id": "683dc10171f1685fc3008e36",
+      "username": "fridge1234",
+      "name": "John Smith",
+      "emailAddress": "email@address.com",
+      "profilePicURL": "",
+      "householdID": "d5TFbn",
+      "allergies": "milk, peanuts",
+      "dietaryRequirements": "",
+      "pantry": [{}],
+      "dateAdded": "2025-06-02T15:19:29.222+00:00",
+      "__v": 0
+    }
   },
   "POST /users/:username/pantry": {
     "description": "adds a new item to the user's pantry array",
     "example response": {
-        "name": "milk",
-        "quantity": 4,
-        "unit": "pints",
-        "location": "fridge",
-        "category": "dairyEggs",
-        "expiryDate": "2025-06-06T00:00:00.000+00:00",
-        "expiresSoon": false,
-        "_id": "683ef0708c2757c7bd974ef0",
-        "dateAdded": "2025-06-03T12:54:08.040+00:00"
-      }
+      "name": "milk",
+      "quantity": 4,
+      "unit": "pints",
+      "location": "fridge",
+      "category": "dairyEggs",
+      "expiryDate": "2025-06-06T00:00:00.000+00:00",
+      "expiresSoon": false,
+      "_id": "683ef0708c2757c7bd974ef0",
+      "dateAdded": "2025-06-03T12:54:08.040+00:00"
+    }
   }
 }

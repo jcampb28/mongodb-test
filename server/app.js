@@ -6,4 +6,8 @@ app.use(express.json());
 
 app.use("/users", usersRouter)
 
+app.all("/*splat", (req, res) => {
+    res.status(404).send({ msg: "Not Found!" })
+});
+
 module.exports = app;

@@ -15,7 +15,22 @@ const testUsers = [
         unit: "pints",
         location: "fridge",
         category: "dairyEggs",
-        expiryDate: "2025-06-06",}],
+        expiryDate: "2025-06-06",},
+      {
+        name: "flour",
+        quantity: 750,
+        unit: "g",
+        location: "cupboard",
+        category: "other",
+        expiryDate: "2025-09-16",
+    }, {
+        name: "tomatoes",
+        quantity: 7,
+        unit: "pcs",
+        location: "fridge",
+        category: "fruitVeg",
+        expiryDate: "2025-06-06",
+    }],
   },
   {
     username: "freezer5678",

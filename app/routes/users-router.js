@@ -6,9 +6,9 @@ const usersRouter = express.Router();
 usersRouter.get("/", async (req, res) => {
   try {
     const users = await User.find();
-    res.json(users);
+    res.send(users);
   } catch (err) {
-    res.status(500).json({ error: "Failed to find users" });
+    res.status(500).send({ error: "Failed to find users" });
   }
 });
 
@@ -16,9 +16,9 @@ usersRouter.post("/", async (req, res) => {
   try {
     const newUser = await User({ ...req.body });
     await newUser.save();
-    res.status(201).json(newUser);
+    res.status(201).send(newUser);
   } catch (err) {
-    res.status(500).json({ error: "Failed to add new user" });
+    res.status(500).send({ error: "Failed to add new user" });
   }
 });
 
@@ -26,32 +26,99 @@ usersRouter.get("/:username", async (req, res) => {
   try {
     const userName = req.params.username;
     const user = await User.findOne({ username: userName });
-    res.json(user);
+    res.send(user);
   } catch (err) {
-    res.status(500).json({ error: "Failed to find users" });
+    res.status(500).send({ error: "Failed to find users" });
   }
 });
 
 usersRouter.get("/:username/pantry", async (req, res) => {
-  try {
-    const user = await User.findOne({ username: req.params.username });
-    res.json(user.pantry);
-  } catch (err) {
-    res.status(500).json({ error: "Failed to fetch fridge items" });
+  const sortBy = "expiryDate";
+  // potential aditional sorting after mvp
+  // if (req.params.sortby) {
+  //   sortBy = req.params.sortby
+  // }
+  if (req.query.location) {
+    try {
+      const user = await User.findOne({ username: req.params.username });
+      const locationFilteredPantry = [];
+      const catAndLocFilteredPantry = [];
+      user.pantry.filter((item) => {
+        if (item.location === req.query.location) {
+          locationFilteredPantry.push(item);
+        }
+      });
+      if (req.query.category) {
+        locationFilteredPantry.filter((item) => {
+          if (item.category === req.query.category) {
+            catAndLocFilteredPantry.push(item);
+          }
+        });
+        catAndLocFilteredPantry.sort((a, b) => a[sortBy] - b[sortBy]);
+        res.send(catAndLocFilteredPantry);
+      }
+      locationFilteredPantry.sort((a, b) => a[sortBy] - b[sortBy]);
+      res.send(locationFilteredPantry);
+    } catch (err) {
+      res.status(500).send({ error: "Failed to fetch fridge items" });
+    }
+  } else if (req.query.category) {
+    try {
+      const user = await User.findOne({ username: req.params.username });
+      const categoryFilteredPantry = [];
+      user.pantry.filter((item) => {
+        if (item.category === req.query.category) {
+          categoryFilteredPantry.push(item);
+        }
+      });
+      categoryFilteredPantry.sort((a, b) => a[sortBy] - b[sortBy]);
+      res.send(categoryFilteredPantry);
+    } catch {
+      res.status(500).send({ error: "Failed to fetch fridge items" });
+    }
+  } else {
+    try {
+      const user = await User.findOne({ username: req.params.username });
+      user.pantry.sort((a, b) => a[sortBy] - b[sortBy]);
+      res.send(user.pantry);
+    } catch (err) {
+      res.status(500).send({ error: "Failed to fetch fridge items" });
+    }
   }
 });
 
 usersRouter.post("/:username/pantry", async (req, res) => {
   try {
-      const newItem = await new Item({...req.body});
-      const user = await User.findOneAndUpdate(
-          { username: req.params.username },
-          {$push: {pantry: newItem}},
-          {returnDocument: "after"} 
-        );
-    res.status(201).json(user.pantry);
+    const newItem = await new Item({ ...req.body });
+    const user = await User.findOneAndUpdate(
+      { username: req.params.username },
+      { $push: { pantry: newItem } },
+      { returnDocument: "after" }
+    );
+    res.status(201).send(user.pantry);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    res.status(400).send({ error: err.message });
+  }
+});
+
+usersRouter.patch("/:username", async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { username: req.params.username },
+      {
+        $set: {
+          username: req.body.username,
+          name: req.body.name,
+          emailAddress: req.body.emailAddress,
+          allergies: req.body.allergies,
+          dietaryRequirements: req.body.dietaryRequirements,
+        },
+      },
+      {returnDocument: "after"}
+    );
+    res.status(201).send(user);
+  } catch (err) {
+    res.status(400).send({ error: err.message });
   }
 });
 
