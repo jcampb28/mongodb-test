@@ -175,7 +175,7 @@ describe("PATCH /users/:username", () => {
       name: "John",
       emailAddress: "email@address.com",
       allergies: "",
-      dietaryRequirements: "pescatarian"
+      dietaryRequirements: "pescatarian",
     };
     const res = await request(app).patch("/users/fridge1234").send(patchedUser);
     expect(res.statusCode).toBe(201);
@@ -190,7 +190,33 @@ describe("PATCH /users/:username", () => {
       pantry: expect.any(Array),
       _id: expect.any(String),
       __v: 0,
-      dateAdded: expect.any(String)
-    })
-  })
-})
+      dateAdded: expect.any(String),
+    });
+  });
+});
+
+describe("PATCH /users/:username/pantry", () => {
+  test("should update a single item in the pantry and return the updated item", async () => {
+    const patchedItem = {
+      _id: "6840310a69406f820b3c6bd0",
+      name: "milk",
+      quantity: 6,
+      unit: "pints",
+      location: "freezer",
+      expiryDate: "2025-07-09",
+    };
+    const res = await request(app).patch("/users/tinned-tomato/pantry").send(patchedItem);
+    expect(res.statusCode).toBe(201);
+    expect(res.body).toMatchObject({
+      _id: "6840310a69406f820b3c6bd0",
+      name: "milk",
+      quantity: 6,
+      unit: "pints",
+      location: "freezer",
+      category: expect.any(String),
+      dateAdded: expect.any(String),
+      expiryDate: expect.any(String),
+      expiresSoon: expect.any(Boolean),
+    });
+  });
+});

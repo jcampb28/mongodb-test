@@ -11,6 +11,7 @@ const testUsers = [
     allergies: "milk, peanuts",
     dietaryRequirements: "",
     pantry: [{name: "milk",
+      _id: "6840310a69406f820b3c6bd0",
         quantity: 4,
         unit: "pints",
         location: "fridge",

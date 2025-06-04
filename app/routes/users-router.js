@@ -114,7 +114,7 @@ usersRouter.patch("/:username", async (req, res) => {
           dietaryRequirements: req.body.dietaryRequirements,
         },
       },
-      {returnDocument: "after"}
+      { returnDocument: "after" }
     );
     res.status(201).send(user);
   } catch (err) {
@@ -122,4 +122,31 @@ usersRouter.patch("/:username", async (req, res) => {
   }
 });
 
+usersRouter.patch("/:username/pantry", async (req, res) => {
+  try {
+    const item = await User.findOneAndUpdate(
+      { username: req.params.username, "pantry._id": req.body._id },
+      {
+        $set: {
+          "pantry.$.name": req.body.name,
+          "pantry.$.quantity": req.body.quantity,
+          "pantry.$.unit": req.body.unit,
+          "pantry.$.location": req.body.location,
+          "pantry.$.expiryDate": req.body.expiryDate,
+        },
+      },
+      {
+        returnDocument: "after",
+      }
+    );
+    item.pantry.filter((item) => {
+      const id = item._id.toString();
+      if (id === req.body._id) {
+        res.status(201).send(item);
+      }
+    });
+  } catch (err) {
+    res.status(400).send({ error: err.message });
+  }
+});
 module.exports = usersRouter;
