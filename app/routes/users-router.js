@@ -14,7 +14,7 @@ usersRouter.get("/", async (req, res) => {
 
 usersRouter.post("/", async (req, res) => {
   try {
-    const newUser = await User({ ...req.body });
+    const newUser = new User({ ...req.body });
     await newUser.save();
     res.status(201).send(newUser);
   } catch (err) {
