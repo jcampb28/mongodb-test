@@ -87,6 +87,18 @@ usersRouter.get("/:username/pantry", async (req, res) => {
   }
 });
 
+usersRouter.get("/:username/pantry/:_id", async (req, res) => {
+  try {
+    const user = await User.findOne(
+      {username: req.params.username, "pantry._id": req.params._id},
+      {"pantry.$": 1}
+    )
+    res.status(200).send(user.pantry[0])
+  } catch (err) {
+    res.status(400).send({ error: err.message })
+  }
+})
+
 usersRouter.post("/:username/pantry", async (req, res) => {
   try {
     const newItem = await new Item({ ...req.body });
@@ -149,4 +161,17 @@ usersRouter.patch("/:username/pantry/:_id", async (req, res) => {
     res.status(400).send({ error: err.message });
   }
 });
+
+usersRouter.delete("/:username/pantry/:_id", async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      {username: req.params.username},
+      {$pull: {pantry: {_id: req.params._id}}},
+      {returnDocument: "after"}
+    )
+    res.status(204).send()
+  } catch (err) {
+    res.status(400).send({ error: err.message })
+  }
+})
 module.exports = usersRouter;
