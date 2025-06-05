@@ -3,9 +3,11 @@
   "version": "0.0.1",
   "description": "seeding test for mongoDB",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node listen.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
@@ -20,6 +22,8 @@
     "supertest": "^7.1.1"
   },
   "jest": {
-    "setupFilesAfterEnv": ["jest-sorted"]
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
   }
 }
