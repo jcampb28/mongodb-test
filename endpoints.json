@@ -63,8 +63,33 @@
         "expiresSoon": false,
         "_id": "683ef0708c2757c7bd974ef0",
         "dateAdded": "2025-06-03T12:54:08.040+00:00"
+      },
+      {
+        "name": "cheese",
+        "quantity": 250,
+        "unit": "g",
+        "location": "fridge",
+        "category": "dairyEggs",
+        "expiryDate": "2025-06-06T00:00:00.000+00:00",
+        "expiresSoon": false,
+        "_id": "693ef0508c2735n7bd975f60",
+        "dateAdded": "2025-06-03T12:54:08.040+00:00"
       }
     ]
+  },
+  "GET /users/username/pantry/:_id": {
+    "description": "serves up the specified item from the pantry",
+    "example response": {
+      "name": "milk",
+      "quantity": 4,
+      "unit": "pints",
+      "location": "fridge",
+      "category": "dairyEggs",
+      "expiryDate": "2025-06-06T00:00:00.000+00:00",
+      "expiresSoon": false,
+      "_id": "683ef0708c2757c7bd974ef0",
+      "dateAdded": "2025-06-03T12:54:08.040+00:00"
+    }
   },
   "POST /users": {
     "description": "adds a new user to the database",
@@ -95,5 +120,53 @@
       "_id": "683ef0708c2757c7bd974ef0",
       "dateAdded": "2025-06-03T12:54:08.040+00:00"
     }
+  },
+  "PATCH /users/:username": {
+    "description": "updates a user's profile",
+    "example input": {
+      "username": "tinned-tomato",
+      "name": "John",
+      "emailAddress": "email@address.com",
+      "allergies": "",
+      "dietaryRequirements": "pescatarian"
+    },
+    "example response": {
+      "name": "John",
+      "username": "tinned-tomato",
+      "emailAddress": "email@address.com",
+      "profilePicURL": "",
+      "householdID": "d5TFbn",
+      "allergies": "",
+      "dietaryRequirements": "pescatarian",
+      "pantry": [],
+      "_id": "68419a22bd6b156af53ef22d",
+      "__v": 0,
+      "dateAdded": "2025-06-05T13:22:42.122+00:00"
+    }
+  },
+  "PATCH /users/:username/pantry/:_id": {
+    "description": "updates the specified pantry item with the information provided",
+    "example input": {
+      "name": "milk",
+      "quantity": 6,
+      "unit": "pints",
+      "location": "freezer",
+      "expiryDate": "2025-07-09"
+    },
+    "example response": {
+      "_id": "6840310a69406f820b3c6bd0",
+      "name": "milk",
+      "quantity": 6,
+      "unit": "pints",
+      "location": "freezer",
+      "category": "dairyEggs",
+      "dateAdded": "2025-06-05T13:22:42.122+00:00",
+      "expiryDate": "2025-06-06T13:22:42.122+00:00",
+      "expiresSoon": true
+    }
+  },
+  "DELETE /users/:username/pantry/:_id": {
+    "description": "removes the specified item from the user's pantry",
+    "example response": "NULL - this request only returns a 204 status code"
   }
 }

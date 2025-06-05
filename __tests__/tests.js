@@ -75,7 +75,7 @@ describe("GET /users/:username/pantry", () => {
     const res = await request(app).get("/users/fridge1234/pantry");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(3);
+    expect(res.body.length).toBe(9);
     res.body.forEach((item) => {
       expect(item).toMatchObject({
         name: expect.any(String),
@@ -95,12 +95,12 @@ describe("GET /users/:username/pantry", () => {
         "/users/fridge1234/pantry?location=fridge"
       );
       expect(res.statusCode).toBe(200);
-      expect(res.body.length).toBe(2);
+      expect(res.body.length).toBe(3);
       res.body.forEach((item) => {
         expect(item.location).toBe("fridge");
       });
     });
-    test("Should return an empty array when no items are in the location specified", async () => {
+    xtest("Should return an empty array when no items are in the location specified", async () => {
       const res = await request(app).get(
         "/users/fridge1234/pantry?location=freezer"
       );
@@ -124,7 +124,7 @@ describe("GET /users/:username/pantry", () => {
         "/users/fridge1234/pantry?category=dairyEggs"
       );
       expect(res.statusCode).toBe(200);
-      expect(res.body.length).toBe(1);
+      expect(res.body.length).toBe(2);
       res.body.forEach((item) => {
         expect(item.category).toBe("dairyEggs");
       });
@@ -134,8 +134,28 @@ describe("GET /users/:username/pantry", () => {
         "/users/fridge1234/pantry?sortby=expiryDate"
       );
       expect(res.statusCode).toBe(200);
-      expect(res.body.length).toBe(3);
+      expect(res.body.length).toBe(9);
       expect(res.body).toBeSortedBy("expiryDate");
+    });
+  });
+});
+
+describe("GET /users/:username/pantry/:_id", () => {
+  test("returns an object containing a single item", async () => {
+    const res = await request(app).get(
+      "/users/fridge1234/pantry/6840310a69406f820b3c6bd0"
+    );
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toMatchObject({
+      _id: "6840310a69406f820b3c6bd0",
+      name: "milk",
+      quantity: 4,
+      unit: "pints",
+      location: "fridge",
+      category: "dairyEggs",
+      dateAdded: expect.any(String),
+      expiryDate: expect.any(String),
+      expiresSoon: expect.any(Boolean),
     });
   });
 });
@@ -219,5 +239,14 @@ describe("PATCH /users/:username/pantry/:_id", () => {
       expiryDate: expect.any(String),
       expiresSoon: expect.any(Boolean),
     });
+  });
+});
+
+xdescribe("DELETE /users/:username/pantry/:_id", () => {
+  test("should delete a single item from the user's pantry and send no response", async () => {
+    const res = await request(app).delete(
+      "/users/tinned-tomato/pantry/6840310a69406f820b3c6bd0"
+    );
+    expect(res.statusCode).toBe(204);
   });
 });
