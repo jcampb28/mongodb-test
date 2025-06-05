@@ -122,10 +122,10 @@ usersRouter.patch("/:username", async (req, res) => {
   }
 });
 
-usersRouter.patch("/:username/pantry", async (req, res) => {
+usersRouter.patch("/:username/pantry/:_id", async (req, res) => {
   try {
     const item = await User.findOneAndUpdate(
-      { username: req.params.username, "pantry._id": req.body._id },
+      { username: req.params.username, "pantry._id": req.params._id },
       {
         $set: {
           "pantry.$.name": req.body.name,
@@ -141,7 +141,7 @@ usersRouter.patch("/:username/pantry", async (req, res) => {
     );
     item.pantry.filter((item) => {
       const id = item._id.toString();
-      if (id === req.body._id) {
+      if (id === req.params._id) {
         res.status(201).send(item);
       }
     });

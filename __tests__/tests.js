@@ -195,17 +195,18 @@ describe("PATCH /users/:username", () => {
   });
 });
 
-describe("PATCH /users/:username/pantry", () => {
+describe("PATCH /users/:username/pantry/:_id", () => {
   test("should update a single item in the pantry and return the updated item", async () => {
     const patchedItem = {
-      _id: "6840310a69406f820b3c6bd0",
       name: "milk",
       quantity: 6,
       unit: "pints",
       location: "freezer",
       expiryDate: "2025-07-09",
     };
-    const res = await request(app).patch("/users/tinned-tomato/pantry").send(patchedItem);
+    const res = await request(app)
+      .patch("/users/tinned-tomato/pantry/6840310a69406f820b3c6bd0")
+      .send(patchedItem);
     expect(res.statusCode).toBe(201);
     expect(res.body).toMatchObject({
       _id: "6840310a69406f820b3c6bd0",
