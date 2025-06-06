@@ -104,7 +104,22 @@ const testUsers = [
     householdID: "9OPnnn",
     allergies: "shellfish",
     dietaryRequirements: "gluten free",
-    pantry: [],
+    pantry: [{
+        name: "chocolate cake",
+        quantity: 1,
+        unit: "pcs",
+        location: "fridge",
+        category: "snacksSweets",
+        expiryDate: "2025-06-06",
+      },
+      {
+        name: "parsley",
+        quantity: 50,
+        unit: "g",
+        location: "cupboard",
+        category: "herbsSpicesCondiments",
+        expiryDate: "2025-06-06",
+      },],
   },
 ];
 

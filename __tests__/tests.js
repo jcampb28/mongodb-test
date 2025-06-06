@@ -50,6 +50,48 @@ describe("POST /api/users", () => {
     expect(res.body).toHaveProperty("pantry");
     expect(res.body.name).toBe(newUser.name);
   });
+  test("returns a 400 error if the household id is not the correct length", async () => {
+    const newUser = {
+      username: "bananarama",
+      name: "Jack Smith",
+      emailAddress: "email2@address.com",
+      profilePicURL: "",
+      householdID: "d5TF",
+      allergies: "",
+      dietaryRequirements: "",
+    };
+    const res = await request(app).post("/users").send(newUser);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.msg).toBe("Bad Request. User validation failed.")
+  });
+  test("returns a 400 error if the username already exists in the database", async () => {
+    const newUser = {
+      username: "fridge1234",
+      name: "Jack Smith",
+      emailAddress: "email3@address.com",
+      profilePicURL: "",
+      householdID: "d5TFbg",
+      allergies: "",
+      dietaryRequirements: "",
+    };
+    const res = await request(app).post("/users").send(newUser);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.msg).toBe("Bad Request. Username already exists in database.")
+  });
+  test("returns a 400 error if the email address already exists in the database", async () => {
+    const newUser = {
+      username: "cheesecake123",
+      name: "Jack Smith",
+      emailAddress: "email@address.com",
+      profilePicURL: "",
+      householdID: "d5TFbg",
+      allergies: "",
+      dietaryRequirements: "",
+    };
+    const res = await request(app).post("/users").send(newUser);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.msg).toBe("Bad Request. Email address already exists in database.")
+  });
 });
 
 describe("GET /users/:username", () => {
@@ -92,17 +134,17 @@ describe("GET /users/:username/pantry", () => {
   describe("GET /users/:username/pantry - filter", () => {
     test("Should return an array filtered only by the location specified", async () => {
       const res = await request(app).get(
-        "/users/fridge1234/pantry?location=fridge"
+        "/users/cupboard31/pantry?location=fridge"
       );
       expect(res.statusCode).toBe(200);
-      expect(res.body.length).toBe(3);
+      expect(res.body.length).toBe(1);
       res.body.forEach((item) => {
         expect(item.location).toBe("fridge");
       });
     });
-    xtest("Should return an empty array when no items are in the location specified", async () => {
+    test("Should return an empty array when no items are in the location specified", async () => {
       const res = await request(app).get(
-        "/users/fridge1234/pantry?location=freezer"
+        "/users/cupboard31/pantry?location=freezer"
       );
       expect(res.statusCode).toBe(200);
       expect(res.body.length).toBe(0);
