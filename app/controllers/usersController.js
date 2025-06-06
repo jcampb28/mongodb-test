@@ -17,7 +17,7 @@ const getSingleUser = async (req, res) => {
   } catch (err) {
     res.status(500).send({ error: "Failed to find users" });
   }
-}
+};
 
 const postUser = async (req, res) => {
   try {
@@ -25,7 +25,27 @@ const postUser = async (req, res) => {
     await newUser.save();
     res.status(201).send(newUser);
   } catch (err) {
-    res.status(500).send({ error: "Failed to add new user" });
+    if (err._message === "User validation failed") {
+      res.status(400).send({ msg: "Bad Request. User validation failed." });
+    } else if (
+      err.errorResponse.errmsg.startsWith("E11000 duplicate key error") &&
+      err.errorResponse.errmsg.includes("username")
+    ) {
+      res
+        .status(400)
+        .send({ msg: "Bad Request. Username already exists in database." });
+    } else if (
+      err.errorResponse.errmsg.startsWith("E11000 duplicate key error") &&
+      err.errorResponse.errmsg.includes("emailAddress")
+    ) {
+      res
+        .status(400)
+        .send({
+          msg: "Bad Request. Email address already exists in database.",
+        });
+    } else {
+      res.status(500).send({ error: "Failed to find users" });
+    }
   }
 };
 
@@ -48,6 +68,6 @@ const patchUser = async (req, res) => {
   } catch (err) {
     res.status(400).send({ error: err.message });
   }
-}
+};
 
 module.exports = { getUsers, postUser, getSingleUser, patchUser };
