@@ -228,6 +228,34 @@ describe("POST /users/:username/pantry", () => {
       _id: expect.any(String),
     });
   });
+  test("returns a 400 error if the quantity is not a number", async () => {
+    const newItem = {
+      name: "bread",
+      quantity: "pizza",
+      unit: "pcs",
+      location: "cupboard",
+      category: "breadBakery",
+      expiryDate: "2025-05-06",
+    }
+    const res = await request(app)
+      .post("/users/freezer5678/pantry")
+      .send(newItem);
+    expect(res.statusCode).toBe(400);
+  });
+  test.only("returns a 400 error if the name is missing", async () => {
+    const newItem = {
+      name: "",
+      quantity: 3,
+      unit: "pcs",
+      location: "cupboard",
+      category: "breadBakery",
+      expiryDate: "2025-05-06",
+    }
+    const res = await request(app)
+      .post("/users/freezer5678/pantry")
+      .send(newItem);
+    expect(res.statusCode).toBe(400);
+  });
 });
 
 describe("PATCH /users/:username", () => {
@@ -282,6 +310,19 @@ describe("PATCH /users/:username/pantry/:_id", () => {
       expiresSoon: expect.any(Boolean),
     });
   });
+  test("should send a 400 error if the quantity is not a number", async () => {
+    const patchedItem = {
+      name: "milk",
+      quantity: "six",
+      unit: "pints",
+      location: "freezer",
+      expiryDate: "2025-07-09",
+    };
+    const res = await request(app)
+      .patch("/users/tinned-tomato/pantry/6840310a69406f820b3c6bd0")
+      .send(patchedItem);
+    expect(res.statusCode).toBe(400);
+  })
 });
 
 xdescribe("DELETE /users/:username/pantry/:_id", () => {

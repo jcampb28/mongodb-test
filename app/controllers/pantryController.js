@@ -71,12 +71,17 @@ const getSingleItem = async (req, res) => {
 const postItemToPantry = async (req, res) => {
   try {
     const newItem = await new Item({ ...req.body });
-    const user = await User.findOneAndUpdate(
-      { username: req.params.username },
-      { $push: { pantry: newItem } },
-      { returnDocument: "after" }
-    );
-    res.status(201).send(user.pantry);
+    console.log(newItem.name)
+    if (newItem.quantity === undefined || newItem.name === undefined || newItem.name.length < 1) {
+      res.status(400).send({error: "Bad request"})
+    } else {
+      const user = await User.findOneAndUpdate(
+        { username: req.params.username },
+        { $push: { pantry: newItem } },
+        { returnDocument: "after" }
+      );
+      res.status(201).send(user.pantry);
+    }
   } catch (err) {
     res.status(400).send({ error: err.message });
   }

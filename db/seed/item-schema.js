@@ -5,6 +5,7 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    minLength: 1
   },
   quantity: {
     type: Number,
